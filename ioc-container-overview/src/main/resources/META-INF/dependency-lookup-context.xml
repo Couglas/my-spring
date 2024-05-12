@@ -9,4 +9,12 @@
         <property name="name" value="couglas" />
     </bean>
 
+    <bean id="admin" class="dependency.domain.Admin" parent="user" primary="true">
+        <property name="auth" value="write" />
+    </bean>
+
+    <bean id="objectFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName" value="user" />
+    </bean>
+
 </beans>

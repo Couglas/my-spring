@@ -1,4 +1,4 @@
-package dependency.domain;
+package domain;
 
 /**
  * 用户类

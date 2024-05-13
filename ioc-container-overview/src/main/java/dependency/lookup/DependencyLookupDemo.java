@@ -1,7 +1,7 @@
 package dependency.lookup;
 
-import dependency.annotation.AdminUser;
-import dependency.domain.User;
+import annotation.AdminUser;
+import domain.User;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
@@ -24,7 +24,7 @@ public class DependencyLookupDemo {
     // 1.定义xml文件
     // 2.启动应用上下文
     public static void main(String[] args) {
-        BeanFactory beanFactory = new ClassPathXmlApplicationContext("classpath:META-INF/dependency-lookup-context.xml");
+        BeanFactory beanFactory = new ClassPathXmlApplicationContext("classpath:/META-INF/dependency-lookup-context.xml");
         lookupRealTime(beanFactory);
         lookupLazy(beanFactory);
 

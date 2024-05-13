@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="user" class="dependency.domain.User" >
+    <bean id="user" class="domain.User" >
         <property name="id" value="1" />
         <property name="name" value="couglas" />
     </bean>
 
-    <bean id="admin" class="dependency.domain.Admin" parent="user" primary="true">
+    <bean id="admin" class="domain.Admin" parent="user" primary="true">
         <property name="auth" value="write" />
     </bean>
 

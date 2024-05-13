@@ -1,6 +1,6 @@
-package dependency.domain;
+package domain;
 
-import dependency.annotation.AdminUser;
+import annotation.AdminUser;
 
 /**
  * 管理员

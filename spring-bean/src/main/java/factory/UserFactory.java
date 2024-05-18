@@ -12,4 +12,9 @@ public interface UserFactory {
     default User createUser() {
         return User.createUser();
     }
+
+
+    void customerInit();
+
+    void destroyFactory();
 }

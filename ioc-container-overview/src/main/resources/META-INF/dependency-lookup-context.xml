@@ -7,6 +7,16 @@
     <bean id="user" class="domain.User" >
         <property name="id" value="1" />
         <property name="name" value="couglas" />
+        <property name="week" value="MONDAY" />
+        <property name="weeks1" value="MONDAY,FRIDAY" />
+        <property name="weeks2">
+            <list>
+                <value>MONDAY</value>
+                <value>FRIDAY</value>
+            </list>
+        </property>
+<!--        <property name="weeks2" value="MONDAY,FRIDAY" />-->
+        <property name="configPath" value="classpath:/META-INF/user-config.properties" />
     </bean>
 
     <bean id="admin" class="domain.Admin" parent="user" primary="true">

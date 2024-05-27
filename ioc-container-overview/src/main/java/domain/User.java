@@ -1,7 +1,11 @@
 package domain;
 
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.core.io.Resource;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,13 +15,14 @@ import java.util.List;
  * @author couglas
  * @since 2024/5/12
  */
-public class User {
+public class User implements BeanNameAware {
     private Long id;
     private String name;
     private Week week;
     private Week[] weeks1;
     private List<Week> weeks2;
     private Resource configPath;
+    private transient String beanName;
 
     public Long getId() {
         return id;
@@ -84,5 +89,22 @@ public class User {
         user.setId(5L);
         user.setName("alia");
         return user;
+    }
+
+    // singleton和protyotype都会执行初始化回调
+    @PostConstruct
+    public void init() {
+        System.out.println("[" + beanName + "] initing ...");
+    }
+
+    // 只有singleton会执行销毁回调
+    @PreDestroy
+    public void destory() {
+        System.out.println("[" + beanName + "] destory ...");
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        this.beanName = name;
     }
 }

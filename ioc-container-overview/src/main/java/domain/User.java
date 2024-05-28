@@ -1,6 +1,5 @@
 package domain;
 
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.core.io.Resource;
 

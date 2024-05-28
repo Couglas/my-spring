@@ -77,6 +77,7 @@ public class BeanScopeDemo implements DisposableBean {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
         applicationContext.register(BeanScopeDemo.class);
 
+
         applicationContext.addBeanFactoryPostProcessor(beanFactory -> {
             beanFactory.addBeanPostProcessor(new BeanPostProcessor() {
                 @Override

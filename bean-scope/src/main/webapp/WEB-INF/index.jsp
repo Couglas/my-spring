@@ -4,6 +4,6 @@
     <title>Title</title>
 </head>
 <body>
-    ${user.id}:${user.name}
+    ${applicationScope['scopedTarget.user'].id}:${applicationScope['scopedTarget.user'].name}
 </body>
 </html>

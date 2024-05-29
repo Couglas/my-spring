@@ -25,7 +25,7 @@ public class IndexController {
 
     @GetMapping("/index.html")
     public String index(Model model) {
-        model.addAttribute("user", user);
+        model.addAttribute("userObject", user);
         return "index";
     }
 }

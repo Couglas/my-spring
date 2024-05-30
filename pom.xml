@@ -15,6 +15,7 @@
         <module>dependency-injection</module>
         <module>dependency-resource</module>
         <module>bean-scope</module>
+        <module>bean-lifecycle</module>
     </modules>
 
     <properties>

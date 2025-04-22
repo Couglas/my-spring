@@ -1,16 +1,7 @@
 package com.spring.context;
 
-import com.spring.beans.BeanDefinition;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.spring.beans.*;
+import com.spring.core.ClassPathXmlResource;
 
 /**
  * xml应用上下文
@@ -18,49 +9,25 @@ import java.util.Map;
  * @author zhenxingchen4
  * @since 2025/4/8
  */
-public class ClassPathXmlApplicationContext {
-    private List<BeanDefinition> beanDefinitions = new ArrayList<>();
-    private Map<String, Object> singletons = new HashMap<>();
+public class ClassPathXmlApplicationContext implements BeanFactory {
+    private final BeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
-        this.readXml(fileName);
-        this.instanceBeans();
+        ClassPathXmlResource resource = new ClassPathXmlResource(fileName);
+        SimpleBeanFactory simpleBeanFactory = new SimpleBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(simpleBeanFactory);
+        reader.loadBeanDefinitions(resource);
+
+        this.beanFactory = simpleBeanFactory;
     }
 
-    private void instanceBeans() {
-        for (BeanDefinition beanDefinition : beanDefinitions) {
-            try {
-                singletons.put(beanDefinition.getId(), Class.forName(beanDefinition.getClassName()).newInstance());
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
+    @Override
+    public Object getBean(String beanName) throws BeanException {
+        return this.beanFactory.getBean(beanName);
     }
 
-    private void readXml(String fileName) {
-        SAXReader saxReader = new SAXReader();
-        try {
-            URL resource = this.getClass().getClassLoader().getResource(fileName);
-            Document document = saxReader.read(resource);
-            Element rootElement = document.getRootElement();
-            for (Element element : rootElement.elements()) {
-                String id = element.attributeValue("id");
-                String className = element.attributeValue("class");
-                BeanDefinition beanDefinition = new BeanDefinition(id, className);
-
-                beanDefinitions.add(beanDefinition);
-            }
-        } catch (DocumentException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Object getBean(String beanName) {
-        return singletons.get(beanName);
+    @Override
+    public void registerBeanDefinition(BeanDefinition beanDefinition) {
+        this.beanFactory.registerBeanDefinition(beanDefinition);
     }
 }

@@ -9,5 +9,7 @@ package com.spring.beans;
 public interface BeanFactory {
     Object getBean(String beanName) throws BeanException;
 
-    void registerBeanDefinition(BeanDefinition beanDefinition);
+    boolean containsBean(String beanName);
+
+    void registerBean(String beanName, Object object);
 }

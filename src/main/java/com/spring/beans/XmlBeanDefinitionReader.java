@@ -10,9 +10,9 @@ import org.dom4j.Element;
  * @since 2025/4/22
  */
 public class XmlBeanDefinitionReader {
-    private final BeanFactory beanFactory;
+    private final SimpleBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(BeanFactory beanFactory) {
+    public XmlBeanDefinitionReader(SimpleBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 

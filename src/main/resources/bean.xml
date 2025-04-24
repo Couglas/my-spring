@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <bean>
-    <bean id="myFirstBean" class="com.spring.test.MyFirstBean" />
+    <bean id="myFirstBean" class="com.spring.test.MyFirstBean">
+        <property type="String" name="name" value="bean1" />
+        <property type="String" name="nickname" value="number one" />
+        <constructor-arg type="String" name="city" value="beijing" />
+        <constructor-arg type="Integer" name="age" value="24" />
+    </bean>
 </bean>

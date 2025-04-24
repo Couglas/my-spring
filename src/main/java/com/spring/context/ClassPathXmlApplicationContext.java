@@ -9,7 +9,7 @@ import com.spring.core.ClassPathXmlResource;
  * @author zhenxingchen4
  * @since 2025/4/8
  */
-public class ClassPathXmlApplicationContext implements BeanFactory {
+public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
     private final BeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
@@ -32,7 +32,22 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
     }
 
     @Override
-    public void registerBean(String beanName, Object object) {
-        this.beanFactory.registerBean(beanName, object);
+    public boolean isSingleton(String name) {
+        return this.beanFactory.isSingleton(name);
+    }
+
+    @Override
+    public boolean isPrototype(String name) {
+        return this.beanFactory.isPrototype(name);
+    }
+
+    @Override
+    public Class<?> getType(String name) {
+        return this.beanFactory.getType(name);
+    }
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+
     }
 }

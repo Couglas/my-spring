@@ -123,25 +123,42 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
             throw new RuntimeException(e);
         }
 
-        PropertyValues propertyValues = beanDefinition.getPropertyValues();
+        handleProperties(beanDefinition, clazz, object);
+
+        return object;
+    }
+
+    private void handleProperties(BeanDefinition bd, Class<?> clazz, Object object) {
+        System.out.println("handle properties beanId: " + bd.getId());
+        PropertyValues propertyValues = bd.getPropertyValues();
         if (!propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.getPropertyCount(); i++) {
                 PropertyValue propertyValue = propertyValues.getIndexedProperty(i);
                 String type = propertyValue.getType();
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
+                boolean isRef = propertyValue.getIsRef();
                 Class<?>[] paramTypes = new Class<?>[1];
                 Object[] paramValues = new Object[1];
-                if ("String".equals(type) || "java.lang.String".equals(type)) {
-                    paramTypes[0] = String.class;
+                if (!isRef) {
+                    if ("String".equals(type) || "java.lang.String".equals(type)) {
+                        paramTypes[0] = String.class;
+                    }
+                    else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
+                        paramTypes[0] = Integer.class;
+                    }
+                    else {
+                        paramTypes[0] = String.class;
+                    }
+                    paramValues[0] = value;
+                } else {
+                    try {
+                        paramTypes[0] = Class.forName(type);
+                        paramValues[0] = getBean((String)value);
+                    } catch (ClassNotFoundException | BeanException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
-                    paramTypes[0] = Integer.class;
-                }
-                else {
-                    paramTypes[0] = String.class;
-                }
-                paramValues[0] = value;
 
                 String methodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
                 Method method;
@@ -153,7 +170,5 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
                 }
             }
         }
-
-        return object;
     }
 }

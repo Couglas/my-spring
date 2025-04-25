@@ -11,6 +11,7 @@ public class MyFirstBean {
     private String nickname;
     private String city;
     private Integer age;
+    private SecondBean secondBean;
 
     public MyFirstBean() {
     }
@@ -44,9 +45,18 @@ public class MyFirstBean {
         return age;
     }
 
+    public SecondBean getSecondBean() {
+        return secondBean;
+    }
+
+    public void setSecondBean(SecondBean secondBean) {
+        this.secondBean = secondBean;
+    }
+
     public void print() {
         System.out.println("this is first bean");
         System.out.println("name: " + name + ", nickName: " + nickname + ", city: " + city + ", age: " + age);
+        System.out.println(secondBean.getDesc());
     }
 
 }

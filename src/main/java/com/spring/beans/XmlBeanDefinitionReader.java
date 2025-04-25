@@ -3,6 +3,7 @@ package com.spring.beans;
 import com.spring.core.Resource;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,15 +27,30 @@ public class XmlBeanDefinitionReader {
             BeanDefinition beanDefinition = new BeanDefinition(id, className);
 
             PropertyValues propertyValues = new PropertyValues();
+            List<String> refList = new ArrayList<>();
             List<Element> propertyElements = element.elements("property");
             for (Element propertyElement : propertyElements) {
                 String type = propertyElement.attributeValue("type");
                 String name = propertyElement.attributeValue("name");
                 String value = propertyElement.attributeValue("value");
+                String ref = propertyElement.attributeValue("ref");
 
-                propertyValues.addPropertyValue(new PropertyValue(type, name, value));
+                boolean isRef = false;
+                String finalValue = "";
+                if (value != null && !value.isEmpty()) {
+                    finalValue = value;
+                }
+                if (ref != null && !ref.isEmpty()) {
+                    finalValue = ref;
+                    isRef = true;
+                    refList.add(ref);
+                }
+
+                propertyValues.addPropertyValue(new PropertyValue(type, name, finalValue, isRef));
             }
             beanDefinition.setPropertyValues(propertyValues);
+            String[] refArray = refList.toArray(new String[0]);
+            beanDefinition.setDependsOn(refArray);
 
             List<Element> constructorElements = element.elements("constructor-arg");
             ArgumentValues argumentValues = new ArgumentValues();

@@ -187,4 +187,14 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
             }
         }
     }
+
+    public void refresh() {
+        for (String beanName : beanDefinitionNames) {
+            try {
+                getBean(beanName);
+            } catch (BeanException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

@@ -10,15 +10,22 @@ import com.spring.core.ClassPathXmlResource;
  * @since 2025/4/8
  */
 public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
-    private final BeanFactory beanFactory;
+    private final SimpleBeanFactory beanFactory;
 
-    public ClassPathXmlApplicationContext(String fileName) {
+    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         ClassPathXmlResource resource = new ClassPathXmlResource(fileName);
         SimpleBeanFactory simpleBeanFactory = new SimpleBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(simpleBeanFactory);
         reader.loadBeanDefinitions(resource);
-
         this.beanFactory = simpleBeanFactory;
+
+        if (isRefresh) {
+            this.beanFactory.refresh();
+        }
+    }
+
+    public ClassPathXmlApplicationContext(String fileName) {
+        this(fileName, true);
     }
 
     @Override

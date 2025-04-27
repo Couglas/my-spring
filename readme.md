@@ -1,4 +1,4 @@
-spring容器
+spring容器手写流程：
 
 从xml解析beanDefinition，根据情况实例化bean，然后存储到一个容器中，以供使用。
 
@@ -8,6 +8,6 @@ applicationContext使用reader解析resource得到beanDefinition，其中reader�
 
 除了一般类型的属性之外，bean可能嵌套依赖bean，此时，为propertyValue新增isRef字段，用于判断该属性是否是一个依赖，如果是则通过createBean方法创建它，形成一个调用链，最终创建出所有依赖的bean。
 
-不过这样有一个问题，如果一个beanA依赖beanB，在解析resource时没有先解析出beanB，创建beanA的beanB属性时则会抛出没有这个bean的错误。在这个过程中，beanA除了没有设置beanB属性，它基本已经实例化好了，因此，在这个环节增加一个逻辑，就可以解决循环依赖的问题。具体来说，在beanA实例化到最后一步时（即还没有beanB属性），将beanA对象先存放到一个地方，然后开始实例化beanB，由于beanB没有依赖其他bean，所以可以实例化成功，最后再把存储未完成的beanA拿出来设置beanB，这样就实例化完成了。这个例子还比较简单，更复杂一点的场景，是a、b相互依赖，a依赖b、b依赖c、c依赖a等等，同理，也可以使用这个逻辑进行处理。总的来说，解决bean循环依赖是把相互依赖的所有bean的实例化作为一个整体来创建。
+不过这样有一个问题，如果一个beanA依赖beanB，在解析resource时没有先解析出beanB，创建beanA的beanB属性时则会抛出没有这个bean的错误。在这个过程中，beanA除了没有设置beanB属性，它基本已经实例化好了，因此，在这个环节增加一个逻辑，就可以解决循环依赖的问题。具体来说，在beanA实例化到最后一步时（即还没有beanB属性），将beanA对象先存放到一个地方earlySingletonObjects，然后开始实例化beanB，由于beanB没有依赖其他bean，所以可以实例化成功，最后再把存储未完成的beanA拿出来设置beanB，这样就实例化完成了。这个例子还比较简单，更复杂一点的场景，是a、b相互依赖，a依赖b、b依赖c、c依赖a等等，同理，也可以使用这个逻辑进行处理。总的来说，解决bean循环依赖是把相互依赖的所有bean的实例化作为一个整体来创建。
 
 

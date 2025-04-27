@@ -1,5 +1,7 @@
 package com.spring.test;
 
+import com.spring.beans.factory.annotation.Autowired;
+
 /**
  * 第一个bean
  *
@@ -11,6 +13,7 @@ public class MyFirstBean {
     private String nickname;
     private String city;
     private Integer age;
+    @Autowired
     private SecondBean secondBean;
 
     public MyFirstBean() {

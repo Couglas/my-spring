@@ -1,10 +1,15 @@
 package com.spring.context;
 
-import com.spring.beans.*;
+import com.spring.beans.BeanException;
 import com.spring.beans.factory.BeanFactory;
-import com.spring.beans.factory.support.SimpleBeanFactory;
+import com.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import com.spring.beans.factory.config.AutowireCapableBeanFactory;
+import com.spring.beans.factory.config.BeanFactoryPostProcessor;
 import com.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.spring.core.ClassPathXmlResource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * xml应用上下文
@@ -13,22 +18,36 @@ import com.spring.core.ClassPathXmlResource;
  * @since 2025/4/8
  */
 public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
-    private final SimpleBeanFactory beanFactory;
-
-    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
-        ClassPathXmlResource resource = new ClassPathXmlResource(fileName);
-        SimpleBeanFactory simpleBeanFactory = new SimpleBeanFactory();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(simpleBeanFactory);
-        reader.loadBeanDefinitions(resource);
-        this.beanFactory = simpleBeanFactory;
-
-        if (isRefresh) {
-            this.beanFactory.refresh();
-        }
-    }
+    private final AutowireCapableBeanFactory beanFactory;
+    private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
 
     public ClassPathXmlApplicationContext(String fileName) {
         this(fileName, true);
+    }
+
+    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
+        ClassPathXmlResource resource = new ClassPathXmlResource(fileName);
+        AutowireCapableBeanFactory autowireCapableBeanFactory = new AutowireCapableBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(autowireCapableBeanFactory);
+        reader.loadBeanDefinitions(resource);
+        this.beanFactory = autowireCapableBeanFactory;
+
+        if (isRefresh) {
+            this.refresh();
+        }
+    }
+
+    private void refresh() {
+        registerBeanPostProcessors(this.beanFactory);
+        onRefresh();
+    }
+
+    private void registerBeanPostProcessors(AutowireCapableBeanFactory beanFactory) {
+        beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+    }
+
+    private void onRefresh() {
+        this.beanFactory.refresh();
     }
 
     @Override
@@ -59,5 +78,13 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     @Override
     public void publishEvent(ApplicationEvent event) {
 
+    }
+
+    public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
+        return beanFactoryPostProcessors;
+    }
+
+    public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor beanFactoryPostProcessor) {
+        this.beanFactoryPostProcessors.add(beanFactoryPostProcessor);
     }
 }

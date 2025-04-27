@@ -12,4 +12,6 @@ applicationContext使用reader解析resource得到beanDefinition，其中reader�
 
 将以上所述内容整体包装一下，对外提供一个refresh方法，封装所有细节，作为容器启动的入口。这个方法包含容器启动的各个步骤，从bean工厂的创建，到bean对象的实例化、初始化，最后到容器加载，一切的bean处理都在这里完成。
 
+在xml中配置ref注入bean不够方便，这就引出了注解注入。虽说注解方便了bean的注入和使用，但作为程序来说它还是在看不见的地方完成了xml的ref所做的事情。注解作用在实例变量上时，想要注解生效，则对象必须创建好，因此，做这个事情就在createBean之后。refresh方法就是遍历所有的beanDefinitaion创建所有的bean，在这个方法中就可以在bean初始化前、中、后分别对bean进行处理，也就是postProcessBeforeInitialization、init-method、postProcessAfterInitialization。具体做法应该是通过反射获取标注了注解的成员变量，把它初始化成bean然后注入属性
+
 

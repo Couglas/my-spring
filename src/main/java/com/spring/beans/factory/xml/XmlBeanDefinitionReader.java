@@ -1,11 +1,11 @@
 package com.spring.beans.factory.xml;
 
-import com.spring.beans.*;
-import com.spring.beans.factory.config.ConstructorArgumentValue;
-import com.spring.beans.factory.config.ConstructorArgumentValues;
+import com.spring.beans.BeanDefinition;
 import com.spring.beans.PropertyValue;
 import com.spring.beans.PropertyValues;
-import com.spring.beans.factory.support.SimpleBeanFactory;
+import com.spring.beans.factory.config.ConstructorArgumentValue;
+import com.spring.beans.factory.config.ConstructorArgumentValues;
+import com.spring.beans.factory.support.AbstractBeanFactory;
 import com.spring.core.Resource;
 import org.dom4j.Element;
 
@@ -19,9 +19,9 @@ import java.util.List;
  * @since 2025/4/22
  */
 public class XmlBeanDefinitionReader {
-    private final SimpleBeanFactory beanFactory;
+    private final AbstractBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(SimpleBeanFactory beanFactory) {
+    public XmlBeanDefinitionReader(AbstractBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 

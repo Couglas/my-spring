@@ -5,7 +5,7 @@
         <property type="String" name="nickname" value="number one" />
         <constructor-arg type="String" name="city" value="beijing" />
         <constructor-arg type="Integer" name="age" value="24" />
-        <property type="com.spring.test.SecondBean" name="secondBean" ref="secondBean" />
+<!--        <property type="com.spring.test.SecondBean" name="secondBean" ref="secondBean" />-->
     </bean>
     <bean id="secondBean" class="com.spring.test.SecondBean">
         <property type="String" name="desc" value="this is second bean" />

@@ -1,17 +1,17 @@
-package com.spring.beans;
+package com.spring.beans.factory.config;
 
 /**
- * 参数对象
+ * 构造器参数对象
  *
  * @author zhenxingchen4
  * @since 2025/4/24
  */
-public class ArgumentValue {
+public class ConstructorArgumentValue {
     private String type;
     private String name;
     private Object value;
 
-    public ArgumentValue(String type, String name, Object value) {
+    public ConstructorArgumentValue(String type, String name, Object value) {
         this.type = type;
         this.name = name;
         this.value = value;

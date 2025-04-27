@@ -1,6 +1,9 @@
 package com.spring.context;
 
 import com.spring.beans.*;
+import com.spring.beans.factory.BeanFactory;
+import com.spring.beans.factory.support.SimpleBeanFactory;
+import com.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.spring.core.ClassPathXmlResource;
 
 /**

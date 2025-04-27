@@ -1,4 +1,4 @@
-package com.spring.beans;
+package com.spring.beans.factory.config;
 
 /**
  * 单例bean注册管理

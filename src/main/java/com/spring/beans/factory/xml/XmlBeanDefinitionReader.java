@@ -1,5 +1,11 @@
-package com.spring.beans;
+package com.spring.beans.factory.xml;
 
+import com.spring.beans.*;
+import com.spring.beans.factory.config.ConstructorArgumentValue;
+import com.spring.beans.factory.config.ConstructorArgumentValues;
+import com.spring.beans.PropertyValue;
+import com.spring.beans.PropertyValues;
+import com.spring.beans.factory.support.SimpleBeanFactory;
 import com.spring.core.Resource;
 import org.dom4j.Element;
 
@@ -53,15 +59,15 @@ public class XmlBeanDefinitionReader {
             beanDefinition.setDependsOn(refArray);
 
             List<Element> constructorElements = element.elements("constructor-arg");
-            ArgumentValues argumentValues = new ArgumentValues();
+            ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
             for (Element constructorElement : constructorElements) {
                 String type = constructorElement.attributeValue("type");
                 String name = constructorElement.attributeValue("name");
                 String value = constructorElement.attributeValue("value");
 
-                argumentValues.addArgumentValue(new ArgumentValue(type, name, value));
+                constructorArgumentValues.addArgumentValue(new ConstructorArgumentValue(type, name, value));
             }
-            beanDefinition.setConstructorArgumentValues(argumentValues);
+            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
 
             this.beanFactory.registerBeanDefinition(id, beanDefinition);
         }

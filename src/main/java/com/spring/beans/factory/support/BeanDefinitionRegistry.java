@@ -1,4 +1,6 @@
-package com.spring.beans;
+package com.spring.beans.factory.support;
+
+import com.spring.beans.BeanDefinition;
 
 /**
  * beanDefinition注册器

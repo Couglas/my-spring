@@ -1,4 +1,6 @@
-package com.spring.beans;
+package com.spring.beans.factory;
+
+import com.spring.beans.BeanException;
 
 /**
  * bean工厂

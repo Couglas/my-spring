@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhenxingchen4
  * @since 2025/4/22
  */
+@Deprecated
 public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory, BeanDefinitionRegistry {
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
     private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>();

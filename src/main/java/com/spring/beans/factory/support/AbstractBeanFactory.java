@@ -34,10 +34,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
 
     public void refresh() {
         for (String beanName : beanDefinitionNames) {
-            try {
-                getBean(beanName);
-            } catch (BeanException e) {
-                throw new RuntimeException(e);
+            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+            if (!beanDefinition.isLazyInit()) {
+                try {
+                    getBean(beanName);
+                } catch (BeanException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -114,13 +117,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     public void registerBeanDefinition(String name, BeanDefinition beanDefinition) {
         this.beanDefinitionMap.put(name, beanDefinition);
         this.beanDefinitionNames.add(name);
-//        if (!beanDefinition.isLazyInit()) {
-//            try {
-//                getBean(name);
-//            } catch (BeanException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
     }
 
     @Override
@@ -197,7 +193,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     private void handleProperties(BeanDefinition bd, Class<?> clazz, Object object) {
-        System.out.println("handle Properties bean: " + bd.getId());
+        System.out.println("handle properties bean: " + bd.getId());
         PropertyValues propertyValues = bd.getPropertyValues();
         if (!propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.getPropertyCount(); i++) {

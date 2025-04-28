@@ -1,6 +1,7 @@
 package com.spring.beans.factory.config;
 
 import com.spring.beans.BeanException;
+import com.spring.beans.factory.BeanFactory;
 
 /**
  * bean初始化器
@@ -13,4 +14,5 @@ public interface BeanPostProcessor {
 
     Object postProcessAfterInitialization(Object bean, String beanName) throws BeanException;
 
+    void setBeanFactory(BeanFactory beanFactory);
 }

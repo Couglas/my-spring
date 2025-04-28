@@ -28,8 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
         implements BeanFactory, BeanDefinitionRegistry {
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
-    private List<String> beanDefinitionNames = new ArrayList<>();
+    protected Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    protected List<String> beanDefinitionNames = new ArrayList<>();
     private final Map<String, Object> earlySingletonObjects = new HashMap<>();
 
     public void refresh() {
@@ -61,7 +61,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
                 // 1. 前置处理
                 applyBeanPostProcessorBeforeInitialization(singleton, beanName);
                 // 2. init-method
-                if (beanDefinition.getInitMethodName() != null && !beanDefinition.getInitMethodName().equals("")) {
+                if (beanDefinition.getInitMethodName() != null && !beanDefinition.getInitMethodName().isEmpty()) {
                     invokeInitMethod(beanDefinition, singleton);
                 }
                 // 3. 后置处理
@@ -99,18 +99,18 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     @Override
-    public boolean isSingleton(String name) {
-        return this.beanDefinitionMap.get(name).isSingleton();
+    public boolean isSingleton(String beanName) {
+        return this.beanDefinitionMap.get(beanName).isSingleton();
     }
 
     @Override
-    public boolean isPrototype(String name) {
-        return this.beanDefinitionMap.get(name).isPrototype();
+    public boolean isPrototype(String beanName) {
+        return this.beanDefinitionMap.get(beanName).isPrototype();
     }
 
     @Override
-    public Class<?> getType(String name) {
-        return this.beanDefinitionMap.get(name).getClass();
+    public Class<?> getType(String beanName) {
+        return this.beanDefinitionMap.get(beanName).getClass();
     }
 
     @Override

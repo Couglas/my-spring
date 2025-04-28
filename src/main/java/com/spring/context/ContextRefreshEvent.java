@@ -1,24 +1,24 @@
 package com.spring.context;
 
-import java.util.EventObject;
-
 /**
- * 应用事件
+ * 上下文刷新事件
  *
  * @author zhenxingchen4
- * @since 2025/4/23
+ * @since 2025/4/27
  */
-public class ApplicationEvent extends EventObject {
-    protected String message;
-
+public class ContextRefreshEvent extends ApplicationEvent {
     /**
      * Constructs a prototypical Event.
      *
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public ApplicationEvent(Object source) {
+    public ContextRefreshEvent(Object source) {
         super(source);
-        this.message = source.toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.message;
     }
 }

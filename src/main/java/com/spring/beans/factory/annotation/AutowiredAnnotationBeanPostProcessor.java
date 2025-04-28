@@ -1,7 +1,7 @@
 package com.spring.beans.factory.annotation;
 
 import com.spring.beans.BeanException;
-import com.spring.beans.factory.config.AutowireCapableBeanFactory;
+import com.spring.beans.factory.BeanFactory;
 import com.spring.beans.factory.config.BeanPostProcessor;
 
 import java.lang.reflect.Field;
@@ -13,13 +13,10 @@ import java.lang.reflect.Field;
  * @since 2025/4/27
  */
 public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
-    private AutowireCapableBeanFactory beanFactory;
+    private BeanFactory beanFactory;
 
-    public AutowireCapableBeanFactory getBeanFactory() {
-        return beanFactory;
-    }
-
-    public void setBeanFactory(AutowireCapableBeanFactory beanFactory) {
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
@@ -38,7 +35,7 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
                 try {
                     field.setAccessible(true);
                     field.set(bean, autowireObj);
-                    System.out.println("autowire " + filedName + " for bean" + beanName);
+                    System.out.println("autowire " + filedName + " for bean: " + beanName);
                 } catch (IllegalAccessException e) {
                     throw new BeanException(e.getMessage());
                 }

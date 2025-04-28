@@ -49,18 +49,18 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
     }
 
     @Override
-    public boolean isSingleton(String name) {
-        return this.beanDefinitionMap.get(name).isSingleton();
+    public boolean isSingleton(String beanName) {
+        return this.beanDefinitionMap.get(beanName).isSingleton();
     }
 
     @Override
-    public boolean isPrototype(String name) {
-        return this.beanDefinitionMap.get(name).isPrototype();
+    public boolean isPrototype(String beanName) {
+        return this.beanDefinitionMap.get(beanName).isPrototype();
     }
 
     @Override
-    public Class<?> getType(String name) {
-        return this.beanDefinitionMap.get(name).getClass();
+    public Class<?> getType(String beanName) {
+        return this.beanDefinitionMap.get(beanName).getClass();
     }
 
     @Override

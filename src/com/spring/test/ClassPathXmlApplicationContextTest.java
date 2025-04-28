@@ -1,5 +1,3 @@
-package com.spring.test;
-
 import com.spring.beans.BeanException;
 import com.spring.context.ClassPathXmlApplicationContext;
 

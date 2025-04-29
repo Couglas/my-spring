@@ -1,3 +1,5 @@
+package com.spring.test;
+
 /**
  * 测试bean
  *

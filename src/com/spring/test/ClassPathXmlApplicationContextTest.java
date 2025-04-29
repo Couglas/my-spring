@@ -1,3 +1,5 @@
+package com.spring.test;
+
 import com.spring.beans.BeanException;
 import com.spring.context.ClassPathXmlApplicationContext;
 
@@ -11,7 +13,7 @@ public class ClassPathXmlApplicationContextTest {
     public static void main(String[] args) throws BeanException {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean.xml");
         MyFirstBean myFirstBean = (MyFirstBean) applicationContext.getBean("myFirstBean");
-//        SecondBean secondBean = (SecondBean) applicationContext.getBean("secondBean");
+//        com.spring.test.SecondBean secondBean = (com.spring.test.SecondBean) applicationContext.getBean("secondBean");
 
         myFirstBean.print();
 //        System.out.println(secondBean.getDesc());

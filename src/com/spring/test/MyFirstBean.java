@@ -1,3 +1,5 @@
+package com.spring.test;
+
 import com.spring.beans.factory.annotation.Autowired;
 
 /**

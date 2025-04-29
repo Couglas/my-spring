@@ -2,7 +2,11 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+<<<<<<< Updated upstream
 !**/Web-INF/classes
+=======
+
+>>>>>>> Stashed changes
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

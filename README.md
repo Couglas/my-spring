@@ -35,10 +35,11 @@
      - EnvironmentCapable：提供获取Environment的方法
 
 # 实现MVC
-MVC的基本流程是：前端发送请求到控制器，控制器寻找对应模型，然后返回结果，视图返给前端生成页面
+MVC的基本流程是：前端发送请求到控制器，控制器寻找对应模型，然后返回结果，视图返给前端生成页面。Servlet规范可以通过Filter或Servlet拦截，Spring MVC选择通过Servlet拦截所有请求，处理映射关系，调用业务逻辑代码，处理返回值给浏览器。开发人员只关注业务逻辑代码，也就是Bean。
 1. 实现原始MVC
-    web.xml配置servlet-class，init-param，load-on-startup、url-pattern等属性。当Tomcat的Servlet容器启动时，先读取web.xml配置，加载配置中的servlet，按规定拦截所有http请求。同实现IoC容器一样，将init-param中的配置的bean通过reader加载到启动类DispatcherServlet。Servlet规范可以通过Filter或Servlet拦截，Spring MVC选择通过Servlet拦截所有请求，处理映射关系，调用业务逻辑代码，处理返回值给浏览器。开发人员只关注业务逻辑代码，也就是Bean。
-2. 
+    web.xml配置servlet-class，init-param，load-on-startup、url-pattern等属性。当Tomcat的Servlet容器启动时，先读取web.xml配置，加载配置中的servlet，按规定拦截所有http请求。同实现IoC容器一样，将init-param中的配置xml中的bean通过reader加载到配置的servlet中。当请求来的时候，实现的doGet方法执行，根据url匹配获取相应的service，然后反射调用它的相应方法。
+2. 扩展原始MVC
+    通过xml配置bean比较繁琐，引入注解@RequestMapping。xml文件通过components、component-scan标签直接配置业务类所在的包。新增解析类读新标签将配置加载到servlet中。然后递归遍历所有配置的包中的所有类，通过反射创建后加载到servlet的成员变量中。最后找出这些类中被@RequestMapping注解的类，将注解里对应的url和类，url和方法加载到servlet中。请求来的时候，通过url获取对应的类和方法，再利用反射invoke调用该方法。
 
 
 

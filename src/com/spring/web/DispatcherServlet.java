@@ -1,5 +1,8 @@
 package com.spring.web;
 
+import com.spring.beans.BeanException;
+import com.spring.test.MyFirstBean;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +35,13 @@ public class DispatcherServlet extends HttpServlet {
     private List<String> urlMappingNames = new ArrayList<>();
     private Map<String, Object> mappingObjects = new HashMap<>();
     private Map<String, Method> mappingMethods = new HashMap<>();
+    private WebApplicationContext webApplicationContext;
 
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
+        this.webApplicationContext = (WebApplicationContext) this.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         String contextConfigLocation = config.getInitParameter("contextConfigLocation");
         URL xmlPath;
         try {
@@ -114,9 +118,6 @@ public class DispatcherServlet extends HttpServlet {
             Class<?> clazz = this.controllerClasses.get(controllerName);
             Object object = this.controllerObjects.get(controllerName);
             Method[] methods = clazz.getDeclaredMethods();
-            if (methods == null) {
-                continue;
-            }
 
             for (Method method : methods) {
                 boolean isRequestMapping = method.isAnnotationPresent(RequestMapping.class);
@@ -132,7 +133,6 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String servletPath = req.getServletPath();
         if (!this.urlMappingNames.contains(servletPath)) {
             return;
@@ -148,6 +148,15 @@ public class DispatcherServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        resp.getWriter().append(result.toString());
+        MyFirstBean myFirstBean;
+        try {
+            myFirstBean = (MyFirstBean) webApplicationContext.getBean("myFirstBean");
+            myFirstBean.print();
+
+        } catch (BeanException e) {
+            throw new RuntimeException(e);
+        }
+
+        resp.getWriter().append(result.toString() + "; " + myFirstBean.getCity() + "; " + myFirstBean.getNickname());
     }
 }

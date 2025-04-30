@@ -38,12 +38,44 @@
 MVC的基本流程是：前端发送请求到控制器，控制器寻找对应模型，然后返回结果，视图返给前端生成页面。Servlet规范可以通过Filter或Servlet拦截，Spring MVC选择通过Servlet拦截所有请求，处理映射关系，调用业务逻辑代码，处理返回值给浏览器。开发人员只关注业务逻辑代码，也就是Bean。
 1. 实现原始MVC
     web.xml配置servlet-class，init-param，load-on-startup、url-pattern等属性。当Tomcat的Servlet容器启动时，先读取web.xml配置，加载配置中的servlet，按规定拦截所有http请求。同实现IoC容器一样，将init-param中的配置xml中的bean通过reader加载到配置的servlet中。当请求来的时候，实现的doGet方法执行，根据url匹配获取相应的service，然后反射调用它的相应方法。
+
 2. 扩展原始MVC
     通过xml配置bean比较繁琐，引入注解@RequestMapping。xml文件通过components、component-scan标签直接配置业务类所在的包。新增解析类读新标签将配置加载到servlet中。然后递归遍历所有配置的包中的所有类，通过反射创建后加载到servlet的成员变量中。最后找出这些类中被@RequestMapping注解的类，将注解里对应的url和类，url和方法加载到servlet中。请求来的时候，通过url获取对应的类和方法，再利用反射invoke调用该方法。
 
+3. 结合IoC容器
+    在Servlet规范中，服务器启动的时候，会根据web.xml文件来配置。因此，每个Java Web应用都必须包含一个web.xml文件，用来配置应用的全部配置信息，且它必须放在WEB-INF路径下。具体元素如下：
+
+    ```xml
+    <?xml version="1.0" encoding="UTF-8">
+    <web-app>
+    <display-name></display-name>  // 声明web应用的名字
+    <description></description>  // 声明web应用的描述信息
+    <context-param></context-param>  // 声明web应用的全局的初始化参数
+    <listener></listener>  // 声明监听器
+    <filter></filter>  // 声明过滤器
+    <serlvet></servlet>  // 声明servlet
+    <serlvet-mapping></servlet-mapping>  // 声明servlet访问路径
+    <session-config></session-config>  // 声明session有关配置
+    <error-page></error-page>  // 声明错误页
+    </web-app>
+    ```
+    Servlet服务器（Tomcat）启动时，大概顺序如下：
+    1. 读取web.xml的context-param，获取全局参数
+    2. 创建一个ServletContext实例，全局有效
+    3. 将全局参数存储在ServletContext中
+    4. 创建listener中定义的监听器，调用contextInitialized方法完成初始化
+    5. Tomcat完成启动后，再初始化filter
+    6. 参数load-on-startup（越小优先级越高）若配置了，自动启动servlet。未配置则等servlet调用时再初始化
+
+    由这个顺序可以看出，想要把IoC容器结合到MVC中，可以在创建监听器的地方做处理。具体来说就是实现一个监听器来加载自己的Ioc容器，绑定到ServletContext中。
+    1. web.xml中配置context-param标签和listener标签
+    2. 新增WebApplicationContext，继承ApplicationContext，提供set、getServletContext方法。新增AnnotationConfigWebApplicationContext，继承ClassPathXmlApplicationContext实现WebApplicationContext。
+    最后新增ContextLoadListener，实现ServletContextListener.contextInitialized方法，获取web.xml中context-param标签的配置（bean的配置文件），创建AnnotationConfigWebApplicationContext，与ServletContext相互绑定。
+    3. 在配置的servlet.init方法中，通过this.getServletContext.getAttribute()获取自定义的WebApplicationContext，放到servet中
+    4. 在doGet方法中就可以使用WebApplicationContext中加载好的bean了
 
 
-
+    
 
 
 

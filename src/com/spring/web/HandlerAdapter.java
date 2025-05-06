@@ -1,0 +1,14 @@
+package com.spring.web;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 适配处理
+ *
+ * @author zhenxingchen4
+ * @since 2025/5/6
+ */
+public interface HandlerAdapter {
+    void handle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception;
+}

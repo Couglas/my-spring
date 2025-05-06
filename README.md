@@ -65,14 +65,20 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
     3. 将全局参数存储在ServletContext中
     4. 创建listener中定义的监听器，调用contextInitialized方法完成初始化
     5. Tomcat完成启动后，再初始化filter
-    6. 参数load-on-startup（越小优先级越高）若配置了，自动启动servlet。未配置则等servlet调用时再初始化
+    6. 初始化servlet。参数load-on-startup（越小优先级越高）若配置了，自动启动servlet。未配置则等servlet调用时再初始化。参数init-param配置需要扫描的包。
 
-    由这个顺序可以看出，想要把IoC容器结合到MVC中，可以在创建监听器的地方做处理。具体来说就是实现一个监听器来加载自己的Ioc容器，绑定到ServletContext中。
-    1. web.xml中配置context-param标签和listener标签
-    2. 新增WebApplicationContext，继承ApplicationContext，提供set、getServletContext方法。新增AnnotationConfigWebApplicationContext，继承ClassPathXmlApplicationContext实现WebApplicationContext。
-    最后新增ContextLoadListener，实现ServletContextListener.contextInitialized方法，获取web.xml中context-param标签的配置（bean的配置文件），创建AnnotationConfigWebApplicationContext，与ServletContext相互绑定。
-    3. 在配置的servlet.init方法中，通过this.getServletContext.getAttribute()获取自定义的WebApplicationContext，放到servet中
-    4. 在doGet方法中就可以使用WebApplicationContext中加载好的bean了
+    由这个顺序可以看出，想要把IoC容器结合到MVC中，可以在创建监听器的地方做处理。具体来说就是实现一个监听器来加载自己的Ioc容器，绑定到ServletContext中，然后实现一个Servlet来解析请求并处理请求。Controller由DispatcherServlet启动，Service由Listener启动，然后解析请求并根据对应的url找到对应的service处理请求。
+3. 拆分DispatcherServlet
+    将所有功能实现都放到DispatcherServlet中，使这个类比较臃肿。因此通过进一步分解，让它只负责解析请求，各种bean则通过专门的context来管理。
+    1. service都通过XmlWebApplicationContext来加载管理
+    2. controller都通过AnnotationConfgWebApplicationContext来加载管理
+    3. 请求的解析通过HandlerMapping来管理映射关系
+    4. 请求的处理通过HandlerAdapter来处理请求
+    5. DispatcherServlet通过依赖以上四个组件做相应的处理
+    
+
+    
+    
 
 
     

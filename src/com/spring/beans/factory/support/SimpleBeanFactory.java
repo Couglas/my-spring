@@ -122,6 +122,9 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 
         try {
             ConstructorArgumentValues constructorArgumentValues = bd.getConstructorArgumentValues();
+            if (constructorArgumentValues == null) {
+                return clazz.newInstance();
+            }
             if (!constructorArgumentValues.isEmpty()) {
                 Class<?>[] paramTypes = new Class<?>[constructorArgumentValues.getArgumentCount()];
                 Object[] paramValues = new Object[constructorArgumentValues.getArgumentCount()];
@@ -157,6 +160,9 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
     private void handleProperties(BeanDefinition bd, Class<?> clazz, Object object) {
         System.out.println("handle properties beanId: " + bd.getId());
         PropertyValues propertyValues = bd.getPropertyValues();
+        if (propertyValues == null) {
+            return;
+        }
         if (!propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.getPropertyCount(); i++) {
                 PropertyValue propertyValue = propertyValues.getIndexedProperty(i);

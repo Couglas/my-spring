@@ -1,4 +1,4 @@
-package com.spring.test;
+package com.test;
 
 /**
  * 测试bean

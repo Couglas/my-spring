@@ -53,7 +53,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
             if (singleton == null) {
                 BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
                 if (beanDefinition == null) {
-                    throw new BeanException("no" + beanName + " bean found!");
+                    throw new BeanException("no " + beanName + " bean found!");
                 }
 
                 singleton = createBean(beanDefinition);
@@ -156,6 +156,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
         Constructor<?> constructor;
         try {
             ConstructorArgumentValues constructorArgumentValues = bd.getConstructorArgumentValues();
+            if (constructorArgumentValues == null) {
+                return clazz.newInstance();
+            }
+
             if (!constructorArgumentValues.isEmpty()) {
                 Class<?>[] paramTypes = new Class<?>[constructorArgumentValues.getArgumentCount()];
                 Object[] paramValues = new Object[constructorArgumentValues.getArgumentCount()];
@@ -195,6 +199,9 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     private void handleProperties(BeanDefinition bd, Class<?> clazz, Object object) {
         System.out.println("handle properties bean: " + bd.getId());
         PropertyValues propertyValues = bd.getPropertyValues();
+        if (propertyValues == null) {
+            return;
+        }
         if (!propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.getPropertyCount(); i++) {
                 PropertyValue propertyValue = propertyValues.getIndexedProperty(i);

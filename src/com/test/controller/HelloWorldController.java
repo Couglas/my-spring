@@ -1,6 +1,7 @@
 package com.test.controller;
 
-import com.spring.web.RequestMapping;
+import com.spring.web.bind.annotation.RequestMapping;
+import com.test.SecondBean;
 
 /**
  * 测试类
@@ -12,5 +13,10 @@ public class HelloWorldController {
     @RequestMapping("/hello")
     public String doGet() {
         return "hello world！";
+    }
+
+    @RequestMapping("/param")
+    public String paramTest(SecondBean secondBean) {
+        return secondBean.getDesc();
     }
 }

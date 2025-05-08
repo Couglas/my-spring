@@ -68,20 +68,35 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
     6. 初始化servlet。参数load-on-startup（越小优先级越高）若配置了，自动启动servlet。未配置则等servlet调用时再初始化。参数init-param配置需要扫描的包。
 
     由这个顺序可以看出，想要把IoC容器结合到MVC中，可以在创建监听器的地方做处理。具体来说就是实现一个监听器来加载自己的Ioc容器，绑定到ServletContext中，然后实现一个Servlet来解析请求并处理请求。Controller由DispatcherServlet启动，Service由Listener启动，然后解析请求并根据对应的url找到对应的service处理请求。
-3. 拆分DispatcherServlet
+
+4. 拆分DispatcherServlet
     将所有功能实现都放到DispatcherServlet中，使这个类比较臃肿。因此通过进一步分解，让它只负责解析请求，各种bean则通过专门的context来管理。
     1. service都通过XmlWebApplicationContext来加载管理
     2. controller都通过AnnotationConfgWebApplicationContext来加载管理
     3. 请求的解析通过HandlerMapping来管理映射关系
     4. 请求的处理通过HandlerAdapter来处理请求
     5. DispatcherServlet通过依赖以上四个组件做相应的处理
+
+5. 处理入参绑定
+
+    在handlerAdapter中处理请求，需要通过req.getParameter()拿到字符串参数，再转成具体的类型后使用。将这块抽成一个通用逻辑，由框架自动处理这些数据的转换。引入WebDataBinder处理请求参数和Java对象的映射，大概思路是：遍历req的参数，将参数转成propertyValues，使用默认或自定义的转换器转换参数后，最后通过反射将参数的值设置到Java对象中。
+
+    1. WebDataBinder，主要有以下功能
+       1. 将req解析成propertyValues
+       2. 可以注册自定义转换器
+       3. 将propertyValues使用转换器转换参数后通过反射设置到Java对象中
+    2. WebDataBinderFactory：创建WebDataBinder，初始化wdb
+    3. BeanWrapperImpl：是WebDataBinder的一个属性，WebDataBinder的主要功能依赖于此类。核心方法是遍历PropertyValue，根据属性名获取该属性的类型和get、set方法，通过属性类型获取对应的转换器，转换后设置属性值。
+    4. BeanPropertyHandler：BeanWrapperImpl的内部类，通过反射提供Java对象属性的set和get方法
+    5. PropertyEditorRegistrySupport：BeanWrapperImpl继承自此类，提供默认转换器和注册自定义转换器的功能
+    6. PropertyEditor：属性转换接口，通过此接口可实现各种不同类型的转换器
+
     
 
     
-    
 
 
-    
+​    
 
 
 

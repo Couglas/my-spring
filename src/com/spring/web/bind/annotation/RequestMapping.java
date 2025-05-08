@@ -1,4 +1,4 @@
-package com.spring.web;
+package com.spring.web.bind.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.spring.web;
+package com.spring.web.method.annotation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
 package com.test;
 
+import java.util.Date;
+
 /**
  * 测试bean
  *
@@ -8,6 +10,7 @@ package com.test;
  */
 public class SecondBean {
     private String desc;
+    private Date myDate;
 
     public String getDesc() {
         return desc;
@@ -15,5 +18,13 @@ public class SecondBean {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public Date getMyDate() {
+        return myDate;
+    }
+
+    public void setMyDate(Date myDate) {
+        this.myDate = myDate;
     }
 }

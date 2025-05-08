@@ -10,4 +10,7 @@
     <bean id="secondBean" class="com.test.SecondBean">
         <property type="String" name="desc" value="this is second bean" />
     </bean>
+    <bean id="webBindingInitializer" class="com.test.DateInitializer">
+
+    </bean>
 </bean>

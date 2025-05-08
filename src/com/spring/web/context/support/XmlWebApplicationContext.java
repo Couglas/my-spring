@@ -1,6 +1,7 @@
-package com.spring.web;
+package com.spring.web.context.support;
 
 import com.spring.context.ClassPathXmlApplicationContext;
+import com.spring.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 

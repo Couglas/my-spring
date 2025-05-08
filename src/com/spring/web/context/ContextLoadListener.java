@@ -1,4 +1,6 @@
-package com.spring.web;
+package com.spring.web.context;
+
+import com.spring.web.context.support.XmlWebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

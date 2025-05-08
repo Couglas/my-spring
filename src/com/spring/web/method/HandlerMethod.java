@@ -1,6 +1,4 @@
-package com.spring.web;
-
-import com.sun.org.apache.bcel.internal.classfile.MethodParameter;
+package com.spring.web.method;
 
 import java.lang.reflect.Method;
 
@@ -14,7 +12,6 @@ public class HandlerMethod {
     private Object bean;
     private Class<?> beanType;
     private Method method;
-    private MethodParameter[] parameters;
     private Class<?> returnType;
     private String description;
     private String className;

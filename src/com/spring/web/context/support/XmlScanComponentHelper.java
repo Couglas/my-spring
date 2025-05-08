@@ -1,4 +1,4 @@
-package com.spring.web;
+package com.spring.web.context.support;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

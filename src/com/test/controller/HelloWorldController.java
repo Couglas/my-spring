@@ -1,9 +1,12 @@
 package com.test.controller;
 
+import com.spring.beans.factory.annotation.Autowired;
 import com.spring.web.bind.annotation.RequestMapping;
 import com.spring.web.bind.annotation.ResponseBody;
 import com.spring.web.servlet.ModelAndView;
 import com.test.SecondBean;
+import com.test.entity.User;
+import com.test.service.UserService;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +19,9 @@ import java.util.Map;
  * @since 2025/4/28
  */
 public class HelloWorldController {
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/hello")
     public String doGet() {
         return "hello world！";
@@ -39,5 +45,11 @@ public class HelloWorldController {
         secondBean.setDesc(secondBean.getDesc());
         secondBean.setMyDate(new Date());
         return secondBean;
+    }
+
+    @RequestMapping("/user")
+    @ResponseBody
+    public User userTest(User user) {
+        return userService.getUser(user.getId());
     }
 }

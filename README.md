@@ -102,7 +102,24 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
     5. ModelAndView：返回类，包含view和model
     6. DispatcherServlet：其核心方法service，通过handlerMapping找到url对应的service的方法，通过handlerAdapter反射调用找到的方法，最后要么使用reviewResolver找到相应的view返回，要么把resp进行flush和close之后直接返回。
 
+# 实现JDBC
 
+ 一个简单的JDBC程序大致流程是：
+
+1. 加载数据库驱动程序：Class.forName(***.driver)
+2. 获取数据库连接：con = DriverManager.getConnnection("jdbc:sqlserver://localhost")
+3. 通过数据库连接con创建statement对象（sql的包装）：stmt = con.createStatement(sql)
+4. 使用statement执行sql，获取ResultSet结果集：rs = stmt.executeQuery()
+5. 操作ResultSet转为业务对象，执行业务逻辑：User user = new User(); user.setId(rs.getInt("id"))
+6. 回收数据库资源，关闭连接，释放资源：rs.close(); stmt.close(); con.close();
+
+依照这个流程，可以看到大部分过程是不变的，变化的地方是在具体的sql，因此可以抽出一个模版来处理这个流程。不变的地方固定写好，变化的部分由子类去实现。
+
+1. JdbcTemplate：抽象类，定义好特定流程，依赖dataSource处理连接
+2. DataSource、SimpleConnectionDataSource：Java定义好的数据源接口，自己实现一个
+3. StatementCallBack、PreparedStatementCallBack：callBack模式简化业务实现类
+
+实现好以上内容之后，只需在applicationContext中配置好相应的bean，交给Ioc容器管理，在合适的地方自动注入即可
 
 
 

@@ -29,7 +29,7 @@ public class CustomNumberEditor implements PropertyEditor {
 
     @Override
     public void setAsText(String text) {
-        if (this.allowEmpty && StringUtils.hasText(text)) {
+        if (this.allowEmpty && !StringUtils.hasText(text)) {
             setValue(null);
         } else if (this.numberFormat != null) {
             setValue(NumberUtils.parseNumber(text, this.numberClass, this.numberFormat));

@@ -1,5 +1,6 @@
 package com.spring.web.method.annotation;
 
+import com.spring.beans.BeanException;
 import com.spring.web.bind.annotation.RequestMapping;
 import com.spring.web.context.WebApplicationContext;
 import com.spring.web.method.HandlerMethod;
@@ -29,8 +30,8 @@ public class RequestMappingHandlerMapping implements HandlerMapping {
         for (String controllerName : this.webApplicationContext.getBeanDefinitionNames()) {
             try {
                 clazz = Class.forName(controllerName);
-                object = clazz.newInstance();
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                object = this.webApplicationContext.getBean(controllerName);
+            } catch (ClassNotFoundException | BeanException e) {
                 throw new RuntimeException(e);
             }
             Method[] methods = clazz.getDeclaredMethods();

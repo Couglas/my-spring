@@ -14,7 +14,8 @@
     <bean id="handlerAdapter" class="com.spring.web.method.annotation.RequestMappingHandlerAdapter">
         <property type="com.spring.web.bind.support.WebBindingInitializer" name="webBindingInitializer"
                   ref="webBindingInitializer"/>
-        <property type="com.spring.http.converter.HttpMessageConverter" name="httpMessageConverter" ref="httpMessageConverter"/>
+        <property type="com.spring.http.converter.HttpMessageConverter" name="httpMessageConverter"
+                  ref="httpMessageConverter"/>
     </bean>
     <bean id="webBindingInitializer" class="com.test.DateInitializer"/>
     <bean id="httpMessageConverter" class="com.spring.http.converter.DefaultHttpMessageConverter">
@@ -29,4 +30,18 @@
         <property type="String" name="prefix" value="/jsp/"/>
         <property type="String" name="suffix" value=".jsp"/>
     </bean>
+
+    <bean id="jdbcTemplate" class="com.test.service.UserJdbcImpl">
+        <property type="javax.sql.DataSource" name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="dataSource" class="com.spring.jdbc.datasource.SimpleConnectionDataSource">
+        <property type="String" name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property type="String" name="url" value="jdbc:mysql://localhost:3306/testdb"/>
+        <property type="String" name="username" value="root"/>
+        <property type="password" name="password" value="Psw1317.,"/>
+    </bean>
+    <bean id="userService" class="com.test.service.UserService">
+        <property type="com.spring.jdbc.core.JdbcTemplate" name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+
 </bean>

@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <bean>
     <bean id="myFirstBean" class="com.test.MyFirstBean">
-        <property type="String" name="name" value="bean1" />
-        <property type="String" name="nickname" value="number one" />
-        <constructor-arg type="String" name="city" value="beijing" />
-        <constructor-arg type="Integer" name="age" value="24" />
+        <property type="String" name="name" value="bean1"/>
+        <property type="String" name="nickname" value="number one"/>
+        <constructor-arg type="String" name="city" value="beijing"/>
+        <constructor-arg type="Integer" name="age" value="24"/>
         <!--        <property type="com.test.SecondBean" name="secondBean" ref="secondBean" />-->
     </bean>
     <bean id="secondBean" class="com.test.SecondBean">
-        <property type="String" name="desc" value="this is second bean" />
+        <property type="String" name="desc" value="this is second bean"/>
     </bean>
-    <bean id="webBindingInitializer" class="com.test.DateInitializer">
 
+    <bean id="handlerAdapter" class="com.spring.web.method.annotation.RequestMappingHandlerAdapter">
+        <property type="com.spring.web.bind.support.WebBindingInitializer" name="webBindingInitializer"
+                  ref="webBindingInitializer"/>
+        <property type="com.spring.http.converter.HttpMessageConverter" name="httpMessageConverter" ref="httpMessageConverter"/>
+    </bean>
+    <bean id="webBindingInitializer" class="com.test.DateInitializer"/>
+    <bean id="httpMessageConverter" class="com.spring.http.converter.DefaultHttpMessageConverter">
+        <property type="com.spring.util.ObjectMapper" name="objectMapper" ref="objectMapper"/>
+    </bean>
+    <bean id="objectMapper" class="com.spring.util.DefaultObjectMapper">
+        <property type="String" name="dateFormat" value="yyyy/MM/dd"/>
+        <property type="String" name="decimalFormat" value="###.##"/>
+    </bean>
+    <bean id="viewResolver" class="com.spring.web.servlet.view.InternalResourceViewResolver">
+        <property type="String" name="viewClassName" value="com.spring.web.servlet.view.JstlView"/>
+        <property type="String" name="prefix" value="/jsp/"/>
+        <property type="String" name="suffix" value=".jsp"/>
     </bean>
 </bean>

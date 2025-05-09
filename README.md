@@ -91,12 +91,18 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
     5. PropertyEditorRegistrySupport：BeanWrapperImpl继承自此类，提供默认转换器和注册自定义转换器的功能
     6. PropertyEditor：属性转换接口，通过此接口可实现各种不同类型的转换器
 
-    
+6. 处理返回数据
 
-    
+    反射调用目标方法得到返回值后，一般有两种方式返回，一种是返回纯数据，如json，另一种是返回一个页面，如jsp。不管是哪种，都需要将Java对象转成某种格式的数据返回。处理的地方就在handlerAdapter中处理请求的最后，大致思路是：判断目标方法是否被@ResponseBody注释，注释的通过转换器转成对应数据后写入resp返回，未注释的则将返回结果处理成ModelAndView返回。dispatcherServlet只负责数据的转换，具体的渲染则引入view来进行处理。
+
+    1. ObjectMapper接口：抽象转换Java对象的功能，如将对象转成json。具体子类根据情况实现
+    2. HttpMessageConverter：依赖ObjectMapper的能力，将对象转成json后，写入resp。具体子类根据情况实现
+    3. View接口：抽象view的通用功能，如render方法，用于设置modelandview中的model属性以及转发请求到相应的页面
+    4. ViewResolver接口：创建view并设置view的属性，如url、contentType等
+    5. ModelAndView：返回类，包含view和model
+    6. DispatcherServlet：其核心方法service，通过handlerMapping找到url对应的service的方法，通过handlerAdapter反射调用找到的方法，最后要么使用reviewResolver找到相应的view返回，要么把resp进行flush和close之后直接返回。
 
 
-​    
 
 
 

@@ -1,12 +1,13 @@
 package com.spring.web.method.annotation;
 
-import com.spring.beans.BeanException;
+import com.spring.http.converter.HttpMessageConverter;
 import com.spring.web.bind.WebDataBinder;
+import com.spring.web.bind.annotation.ResponseBody;
 import com.spring.web.bind.support.WebBindingInitializer;
 import com.spring.web.bind.support.WebDataBinderFactory;
-import com.spring.web.context.WebApplicationContext;
 import com.spring.web.method.HandlerMethod;
 import com.spring.web.servlet.HandlerAdapter;
+import com.spring.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,32 +21,31 @@ import java.lang.reflect.Parameter;
  * @since 2025/5/6
  */
 public class RequestMappingHandlerAdapter implements HandlerAdapter {
-    private WebApplicationContext webApplicationContext;
     private WebBindingInitializer webBindingInitializer;
+    private HttpMessageConverter httpMessageConverter;
 
-    public RequestMappingHandlerAdapter(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-        try {
-            this.webBindingInitializer = (WebBindingInitializer) this.webApplicationContext.getBean("webBindingInitializer");
-        } catch (BeanException e) {
-            throw new RuntimeException(e);
-        }
+    public RequestMappingHandlerAdapter() {
+    }
+
+    public void setWebBindingInitializer(WebBindingInitializer webBindingInitializer) {
+        this.webBindingInitializer = webBindingInitializer;
+    }
+
+    public void setHttpMessageConverter(HttpMessageConverter httpMessageConverter) {
+        this.httpMessageConverter = httpMessageConverter;
     }
 
     @Override
-    public void handle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
-        handleInternal(req, resp, (HandlerMethod) handler);
+    public ModelAndView handle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+        return handleInternal(req, resp, (HandlerMethod) handler);
     }
 
-    private void handleInternal(HttpServletRequest req, HttpServletResponse resp, HandlerMethod handler) throws Exception {
-        if (handler == null) {
-            return;
-        }
-
-        invokeHandlerMethod(req, resp, handler);
+    private ModelAndView handleInternal(HttpServletRequest req, HttpServletResponse resp, HandlerMethod handler) throws Exception {
+        return invokeHandlerMethod(req, resp, handler);
     }
 
-    protected void invokeHandlerMethod(HttpServletRequest req, HttpServletResponse resp, HandlerMethod handlerMethod) throws Exception {
+    protected ModelAndView invokeHandlerMethod(HttpServletRequest req, HttpServletResponse resp, HandlerMethod handlerMethod) throws Exception {
+        ModelAndView mav = null;
         WebDataBinderFactory binderFactory = new WebDataBinderFactory();
         Parameter[] methodParameters = handlerMethod.getMethod().getParameters();
         Object[] methodParamObjs = new Object[methodParameters.length];
@@ -59,10 +59,21 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
             i++;
         }
 
-
         Method invocableMethod = handlerMethod.getMethod();
         Object result = invocableMethod.invoke(handlerMethod.getBean(), methodParamObjs);
-        resp.getWriter().append(result.toString());
+
+        if (invocableMethod.isAnnotationPresent(ResponseBody.class)) {
+            this.httpMessageConverter.write(result, resp);
+        } else {
+            if (result instanceof ModelAndView) {
+                mav = (ModelAndView) result;
+            } else if (result instanceof String) {
+                mav = new ModelAndView();
+                mav.setViewName((String) result);
+            }
+        }
+
+        return mav;
     }
 
 

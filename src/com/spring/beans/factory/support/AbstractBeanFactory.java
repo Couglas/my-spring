@@ -174,6 +174,9 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
                     } else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
                         paramTypes[i] = Integer.class;
                         paramValues[i] = Integer.valueOf((String) value);
+                    } else if ("int".equals(type)) {
+                        paramTypes[i] = int.class;
+                        paramValues[i] = Integer.valueOf((String) value).intValue();
                     } else {
                         paramTypes[i] = String.class;
                         paramValues[i] = value;
@@ -215,12 +218,17 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
                 if (!isRef) {
                     if ("String".equals(type) || "java.lang.String".equals(type)) {
                         paramTypes[0] = String.class;
+                        paramValues[0] = value;
                     } else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
                         paramTypes[0] = Integer.class;
+                        paramValues[0] = Integer.valueOf((String) value);
+                    } else if ("int".equals(type)) {
+                        paramTypes[0] = int.class;
+                        paramValues[0] = Integer.valueOf((String) value).intValue();
                     } else {
                         paramTypes[0] = String.class;
+                        paramValues[0] = value;
                     }
-                    paramValues[0] = value;
                 } else {
                     try {
                         paramTypes[0] = clazz.forName(type);

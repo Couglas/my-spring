@@ -5,6 +5,7 @@ import com.spring.jdbc.core.JdbcTemplate;
 import com.test.entity.User;
 
 import java.sql.ResultSet;
+import java.util.List;
 
 /**
  * 用户服务
@@ -36,7 +37,7 @@ public class UserService {
 
     public User getUserInfo(Long userId) {
         String sql = "select * from user where id = " + userId;
-        return (User) jdbcTemplate.query(sql, new Object[]{new Long(userId)}, stmt -> {
+        return (User) jdbcTemplate.query(sql, new Object[]{userId}, stmt -> {
             ResultSet res = stmt.executeQuery();
             if (res.next()) {
                 User user = new User();
@@ -46,6 +47,17 @@ public class UserService {
             }
 
             return null;
+        });
+    }
+
+    public List<User> getUserList(Long userId) {
+        String sql = "select * from user where id > ? ";
+        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setName(rs.getString("name"));
+            System.out.println(rowNum);
+            return user;
         });
     }
 }

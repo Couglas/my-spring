@@ -25,7 +25,7 @@ public class DefaultHttpMessageConverter implements HttpMessageConverter {
     }
 
     private void writeInternal(Object object, HttpServletResponse resp) throws IOException {
-        String jsonStr = this.objectMapper.writeValueAsString(object);
+        String jsonStr = this.objectMapper.writeValuesAsString(object);
         resp.getWriter().write(jsonStr);
     }
 

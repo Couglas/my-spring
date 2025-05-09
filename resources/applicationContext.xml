@@ -34,11 +34,12 @@
     <bean id="jdbcTemplate" class="com.test.service.UserJdbcImpl">
         <property type="javax.sql.DataSource" name="dataSource" ref="dataSource"/>
     </bean>
-    <bean id="dataSource" class="com.spring.jdbc.datasource.SimpleConnectionDataSource">
+    <bean id="dataSource" class="com.spring.jdbc.pool.PooledDataSource">
         <property type="String" name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property type="String" name="url" value="jdbc:mysql://localhost:3306/testdb"/>
         <property type="String" name="username" value="root"/>
         <property type="password" name="password" value="Psw1317.,"/>
+        <property type="int" name="initialSize" value="3"/>
     </bean>
     <bean id="userService" class="com.test.service.UserService">
         <property type="com.spring.jdbc.core.JdbcTemplate" name="jdbcTemplate" ref="jdbcTemplate"/>

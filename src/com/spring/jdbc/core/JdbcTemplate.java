@@ -2,6 +2,7 @@ package com.spring.jdbc.core;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 /**
  * jdbc模板
@@ -64,14 +65,8 @@ public abstract class JdbcTemplate {
         try {
             conn = dataSource.getConnection();
             stmt = conn.prepareStatement(sql);
-            for (int i = 0; i < args.length; i++) {
-                Object arg = args[i];
-                if (arg instanceof String) {
-                    stmt.setString(i + 1, (String) arg);
-                } else if (arg instanceof Long) {
-                    stmt.setLong(i + 1, (Long) arg);
-                }
-            }
+            ArgumentPreparedStatementSetter argumentSetter = new ArgumentPreparedStatementSetter(args);
+            argumentSetter.setValues(stmt);
 
             return preparedStatementCallback.doInPreparedStatement(stmt);
         } catch (SQLException e) {
@@ -100,6 +95,47 @@ public abstract class JdbcTemplate {
             }
         }
     }
+
+    public <T> List<T> query(String sql, Object[] args, RowMapper<T> rowMapper) {
+        RowMapperResultSetExtractor<T> resultExtractor = new RowMapperResultSetExtractor<>(rowMapper);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet res = null;
+
+        try {
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
+            ArgumentPreparedStatementSetter statementSetter = new ArgumentPreparedStatementSetter(args);
+            statementSetter.setValues(stmt);
+            res = stmt.executeQuery();
+            return resultExtractor.extractData(res);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (res != null) {
+                try {
+                    res.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
 
     protected abstract Object doInStatement(ResultSet res);
 }

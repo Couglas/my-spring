@@ -10,6 +10,7 @@ import com.test.service.UserService;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,5 +52,11 @@ public class HelloWorldController {
     @ResponseBody
     public User userTest(User user) {
         return userService.getUser(user.getId());
+    }
+
+    @RequestMapping("/users")
+    @ResponseBody
+    public List<User> usersTest(User user) {
+        return userService.getUserList(user.getId());
     }
 }

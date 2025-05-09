@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 默认对象转换器
@@ -33,7 +34,10 @@ public class DefaultObjectMapper implements ObjectMapper {
     }
 
     @Override
-    public String writeValueAsString(Object object) {
+    public String writeValuesAsString(Object object) {
+        if (object instanceof List) {
+            return writeListAsString((List<?>) object);
+        }
         String jsonStr = "{";
         Class<?> clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();
@@ -66,5 +70,22 @@ public class DefaultObjectMapper implements ObjectMapper {
         jsonStr += "}";
 
         return jsonStr;
+    }
+
+    public String writeListAsString(List<?> list) {
+        String sJsonStr = "[";
+
+        for (Object obj : list) {
+            String sObj = writeValuesAsString(obj);
+            if (sJsonStr.equals("[")) {
+                sJsonStr += sObj;
+            } else {
+                sJsonStr += "," + sObj;
+            }
+        }
+
+        sJsonStr += "]";
+        return sJsonStr;
+
     }
 }

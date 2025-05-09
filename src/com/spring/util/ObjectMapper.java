@@ -11,5 +11,5 @@ public interface ObjectMapper {
 
     void setDecimalFormat(String decimalFormat);
 
-    String writeValueAsString(Object object);
+    String writeValuesAsString(Object object);
 }

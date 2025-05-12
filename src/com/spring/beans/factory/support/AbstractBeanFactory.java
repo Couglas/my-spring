@@ -83,7 +83,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     public abstract Object applyBeanPostProcessorBeforeInitialization(Object singleton, String beanName);
 
     private void invokeInitMethod(BeanDefinition beanDefinition, Object object) {
-        Class<?> clazz = beanDefinition.getClass();
+        Class<?> clazz = object.getClass();
         Method method;
 
         try {

@@ -31,6 +31,8 @@ public class XmlBeanDefinitionReader {
             String id = element.attributeValue("id");
             String className = element.attributeValue("class");
             BeanDefinition beanDefinition = new BeanDefinition(id, className);
+            String initMethod = element.attributeValue("init-method");
+            beanDefinition.setInitMethodName(initMethod);
 
             PropertyValues propertyValues = new PropertyValues();
             List<String> refList = new ArrayList<>();

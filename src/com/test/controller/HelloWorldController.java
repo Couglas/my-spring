@@ -59,4 +59,10 @@ public class HelloWorldController {
     public List<User> usersTest(User user) {
         return userService.getUserList(user.getId());
     }
+
+    @RequestMapping("/user-info")
+    @ResponseBody
+    public User userInfoTest(User user) {
+        return userService.getUserInfo(user.getId());
+    }
 }

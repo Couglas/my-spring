@@ -41,8 +41,9 @@
         <property type="password" name="password" value="Psw1317.,"/>
         <property type="int" name="initialSize" value="3"/>
     </bean>
-    <bean id="userService" class="com.test.service.UserService">
-        <property type="com.spring.jdbc.core.JdbcTemplate" name="jdbcTemplate" ref="jdbcTemplate"/>
+    <bean id="userService" class="com.test.service.UserService"/>
+    <bean id="sqlSessionFactory" class="com.spring.batis.DefaultSqlSessionFactory" init-method="init">
+        <property type="String" name="mapperLocation" value="mapper"/>
     </bean>
 
 </bean>

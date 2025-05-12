@@ -133,7 +133,29 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
    4. ResultSetExtractor接口：处理多行结果映射，依赖RowMapper
    5. RowMapperResultSetExtractor：具体结果集映射的实现类，将ResultSet -> List<T>
    6. ArgumentPreparedStatementSetter：处理参数解析
-   7. 
+
+3. 实现mybatis
+
+   mybatis是一个支持自定义sql、存储过程和复杂映射的框架，简化了jdbc代码，通过配置转换数据和Java对象。它的大致工作的流程如下：
+
+   1. 创建sqlSessionFactory：读取mybatis-config.xml，构建factory。xml中配置了用户名、密码、url、mapper等配置
+   2. 创建sqlSession：sqlSessionFactory.openSession
+   3. 查询：session.selectOne()，传入参数和查找sql的id，执行查询
+
+   总结一下就是，读取xml配置创建factory，查询时匹配mapper中对应的sql，拼接替换占位符后，查询并返回对象
+
+   1. 添加mapper.xml文件
+   2. 定义MapperNode对象，映射mapper.xml中的数据
+   3. 实现SqlSessionFactory：
+      1. 获取mapperNode：本质就是根据sqlId查询对应sql片段。具体则是解析mapper.xml文件，转成MapperNode的map，提供获取mapperNode的方法。
+      2. 获取sqlSession。
+   4. 实现SqlSession：依赖sqlSessionFactory的获取mapperNode的能力查询mapper中对应的sql，依赖jdbcTemplate的查询能力实现查询
+   5. 将sqlSessionFactory配置到IoC容器中
+   6. 具体服务依赖sqlSessionFactory实现查询功能
+
+
+
+
 
 
 

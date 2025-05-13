@@ -153,7 +153,16 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
    5. 将sqlSessionFactory配置到IoC容器中
    6. 具体服务依赖sqlSessionFactory实现查询功能
 
+# 实现AOP
 
+AOP本质上就是通过动态代理创建代理类将通用逻辑加入方法调用的过程。Java支持两种动态代理，一种是JDK动态代理，主要依赖Proxy.newInstance()创建代理类和InvocationHandler接口拦截方法来实现动态代理。另一种是CGLIB动态代理，依赖Enhancer.create()创建代理类和MethodInterceptor接口拦截方法来实现动态代理。
+
+1. 实现简单AOP
+   1. FactoryBean接口：获取代理的对象。其实现类依赖AopProxy获取代理对象
+   2. FactoryBeanRegistrySupport：获取代理的对象以及对该对象进行预处理
+   3. AopProxy接口：获取的代理对象，其实现类通过Proxy.create()创建代理对象，实现的invoke方法处理通用逻辑。
+   4. AopProxyFactory接口：创建AopProxy
+   5. AbstractBeanFactory继承FactoryBeanRegistrySupport，当getBean是FactoryBean时，通过factorybean获取代理对象，而不是对象本身。
 
 
 

@@ -4,7 +4,8 @@ import com.spring.beans.BeanDefinition;
 import com.spring.beans.BeanException;
 import com.spring.beans.PropertyValue;
 import com.spring.beans.PropertyValues;
-import com.spring.beans.factory.BeanFactory;
+import com.spring.beans.factory.FactoryBean;
+import com.spring.beans.factory.config.ConfigurableBeanFactory;
 import com.spring.beans.factory.config.ConstructorArgumentValue;
 import com.spring.beans.factory.config.ConstructorArgumentValues;
 
@@ -26,8 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhenxingchen4
  * @since 2025/4/27
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
-        implements BeanFactory, BeanDefinitionRegistry {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport
+        implements ConfigurableBeanFactory, BeanDefinitionRegistry {
     protected Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
     protected List<String> beanDefinitionNames = new ArrayList<>();
     private final Map<String, Object> earlySingletonObjects = new HashMap<>();
@@ -71,7 +72,20 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
             }
         }
 
+        if (singleton instanceof FactoryBean) {
+            return this.getObjectFromBeanInstance(singleton, beanName);
+        }
+
         return singleton;
+    }
+
+    protected Object getObjectFromBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+        return getObjectFromFactoryBean(factoryBean, beanName);
     }
 
     private void registerBean(String beanName, Object singleton) {

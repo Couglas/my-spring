@@ -6,6 +6,7 @@ import com.spring.web.bind.annotation.ResponseBody;
 import com.spring.web.servlet.ModelAndView;
 import com.test.SecondBean;
 import com.test.entity.User;
+import com.test.service.Action;
 import com.test.service.UserService;
 
 import java.util.Date;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class HelloWorldController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private Action action;
 
     @RequestMapping("/hello")
     public String doGet() {
@@ -64,5 +67,10 @@ public class HelloWorldController {
     @ResponseBody
     public User userInfoTest(User user) {
         return userService.getUserInfo(user.getId());
+    }
+
+    @RequestMapping("/aop")
+    public void testAop() {
+        action.doAction();
     }
 }

@@ -158,13 +158,31 @@ MVC的基本流程是：前端发送请求到控制器，控制器寻找对应�
 AOP本质上就是通过动态代理创建代理类将通用逻辑加入方法调用的过程。Java支持两种动态代理，一种是JDK动态代理，主要依赖Proxy.newInstance()创建代理类和InvocationHandler接口拦截方法来实现动态代理。另一种是CGLIB动态代理，依赖Enhancer.create()创建代理类和MethodInterceptor接口拦截方法来实现动态代理。
 
 1. 实现简单AOP
+
    1. FactoryBean接口：获取代理的对象。其实现类依赖AopProxy获取代理对象
    2. FactoryBeanRegistrySupport：获取代理的对象以及对该对象进行预处理
    3. AopProxy接口：获取的代理对象，其实现类通过Proxy.create()创建代理对象，实现的invoke方法处理通用逻辑。
    4. AopProxyFactory接口：创建AopProxy
    5. AbstractBeanFactory继承FactoryBeanRegistrySupport，当getBean是FactoryBean时，通过factorybean获取代理对象，而不是对象本身。
 
+2. 扩展AOP
 
+   实现的简单aop增强直接逻辑放在了invoke执行的前后，基于单一原则，专门的类做专门的事情，定义以下接口
+
+   1. Advice接口：表示增强
+   2. Interceptor接口：具体增强的逻辑，继承Advice
+   3. MethodInterceptor接口：具体方法的增强，继承Interceptor，定义invoke方法，具体调用依赖参数MethodInvocation
+   4. MethodInvocation接口：执行method.invoke()
+   5. Advisor接口：封装增强逻辑
+   6. BeanFactoryAware接口：设置beanFactory
+   7. BeforeAdvice接口：表示前置增强
+   8. MethodBeforeAdvice接口：具体方法的前置增强
+   9. AfterAdvice接口：表示后置增强
+   10. AfterReturingAdvice接口：具体方法的后置增强
+   11. MethodBeforeAdviceInterceptor：具体方法前置增强拦截器
+   12. AfterReturningAdviceInterceptor：具体方法后置增强拦截器
+
+   修改之前的增强逻辑，使用新增的advisor来专门处理
 
 
 

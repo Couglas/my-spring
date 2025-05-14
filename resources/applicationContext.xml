@@ -46,7 +46,11 @@
         <property type="String" name="mapperLocation" value="mapper"/>
     </bean>
     <bean id="realAction" class="com.test.service.RealAction"/>
-    <bean id="action" class="com.spring.aop.ProxyFactoryBean">
+    <bean id="action" class="com.spring.aop.framework.ProxyFactoryBean">
         <property type="java.lang.Object" name="target" ref="realAction" />
+        <property type="String" name="interceptorName" value="beforeAdviceService" />
     </bean>
+    <bean id="tracingInterceptor" class="com.test.service.TracingInterceptor" />
+    <bean id="afterAdviceService" class="com.test.service.AfterAdviceService" />
+    <bean id="beforeAdviceService" class="com.test.service.BeforeAdviceService" />
 </bean>

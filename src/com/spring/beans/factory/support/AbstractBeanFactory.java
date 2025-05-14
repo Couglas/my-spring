@@ -4,6 +4,7 @@ import com.spring.beans.BeanDefinition;
 import com.spring.beans.BeanException;
 import com.spring.beans.PropertyValue;
 import com.spring.beans.PropertyValues;
+import com.spring.beans.factory.BeanFactoryAware;
 import com.spring.beans.factory.FactoryBean;
 import com.spring.beans.factory.config.ConfigurableBeanFactory;
 import com.spring.beans.factory.config.ConstructorArgumentValue;
@@ -60,6 +61,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport
 
                 singleton = createBean(beanDefinition);
                 this.registerBean(beanName, singleton);
+                if (singleton instanceof BeanFactoryAware) {
+                    ((BeanFactoryAware) singleton).setBeanFactory(this);
+                }
                 // 1. 前置处理
                 applyBeanPostProcessorBeforeInitialization(singleton, beanName);
                 // 2. init-method

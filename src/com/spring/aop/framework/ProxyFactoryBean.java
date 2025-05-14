@@ -1,9 +1,6 @@
 package com.spring.aop.framework;
 
 import com.spring.aop.*;
-import com.spring.aop.framework.AopProxy;
-import com.spring.aop.framework.AopProxyFactory;
-import com.spring.aop.framework.DefaultAopProxyFactory;
 import com.spring.beans.BeanException;
 import com.spring.beans.factory.BeanFactory;
 import com.spring.beans.factory.BeanFactoryAware;
@@ -24,27 +21,18 @@ public class ProxyFactoryBean implements FactoryBean<Object>, BeanFactoryAware {
     private ClassLoader proxyClassLoader = ClassUtils.getDefaultClassLoader();
     private Object singletonInstance;
     private String interceptorName;
-    private Advisor advisor;
+    private PointcutAdvisor advisor;
     private BeanFactory beanFactory;
 
     private synchronized void initializeAdvisor() {
         Object advice;
-        MethodInterceptor methodInterceptor = null;
         try {
             advice = this.beanFactory.getBean(this.interceptorName);
         } catch (BeanException e) {
             throw new RuntimeException(e);
         }
-        if (advice instanceof BeforeAdvice) {
-            methodInterceptor = new MethodBeforeAdviceInterceptor((MethodBeforeAdvice) advice);
-        } else if (advice instanceof AfterAdvice) {
-            methodInterceptor = new AfterReturningAdviceInterceptor((AfterReturningAdvice) advice);
-        } else if (advice instanceof MethodInterceptor) {
-            methodInterceptor = (MethodInterceptor) advice;
-        }
 
-        advisor = new DefaultAdvisor();
-        advisor.setMethodInterceptor(methodInterceptor);
+        advisor = (PointcutAdvisor) advice;
     }
 
     public ProxyFactoryBean() {

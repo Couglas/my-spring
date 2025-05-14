@@ -1,7 +1,6 @@
 package com.spring.aop.framework;
 
-import com.spring.aop.Advisor;
-import com.spring.aop.framework.AopProxy;
+import com.spring.aop.PointcutAdvisor;
 
 /**
  * aop代理工厂
@@ -10,5 +9,5 @@ import com.spring.aop.framework.AopProxy;
  * @since 2025/5/12
  */
 public interface AopProxyFactory {
-    AopProxy createAopProxy(Object target, Advisor advisor);
+    AopProxy createAopProxy(Object target, PointcutAdvisor advisor);
 }

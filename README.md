@@ -181,6 +181,11 @@ AOP本质上就是通过动态代理创建代理类将通用逻辑加入方法�
    10. AfterReturingAdvice接口：具体方法的后置增强
    11. MethodBeforeAdviceInterceptor：具体方法前置增强拦截器
    12. AfterReturningAdviceInterceptor：具体方法后置增强拦截器
+   13. MethodMatcher接口：匹配拦截的方法名
+   14. Pointcut接口：切点
+   15. PointcutAdvisor接口：支持切点的切面
+   16. NamedMethodPointcut：实现Pointcut和MethodMatcher
+   17. NamedMethodPointcutAdvisor：实现PointcutAdvisor，依赖NamedMethodPointcut匹配方法名的能力，依赖具体的advice的增强能力
 
    修改之前的增强逻辑，使用新增的advisor来专门处理
 

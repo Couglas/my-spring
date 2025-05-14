@@ -1,8 +1,8 @@
 package com.spring.aop.framework;
 
-import com.spring.aop.Advisor;
 import com.spring.aop.MethodInterceptor;
 import com.spring.aop.MethodInvocation;
+import com.spring.aop.PointcutAdvisor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -16,9 +16,9 @@ import java.lang.reflect.Proxy;
  */
 public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
     private Object target;
-    private Advisor advisor;
+    private PointcutAdvisor advisor;
 
-    public JdkDynamicAopProxy(Object target, Advisor advisor) {
+    public JdkDynamicAopProxy(Object target, PointcutAdvisor advisor) {
         this.target = target;
         this.advisor = advisor;
     }
@@ -30,8 +30,8 @@ public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getName().equalsIgnoreCase("doAction")) {
-            Class<?> targetClass = (target != null ? target.getClass() : null);
+        Class<?> targetClass = (target != null ? target.getClass() : null);
+        if (this.advisor.getPointcut().getMethodMatcher().matches(method, targetClass)) {
             MethodInterceptor interceptor = this.advisor.getMethodInterceptor();
             MethodInvocation invocation = new ReflectionMethodInvocation(proxy, target, method, args, targetClass);
             return interceptor.invoke(invocation);

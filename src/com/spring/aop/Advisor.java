@@ -1,7 +1,7 @@
 package com.spring.aop;
 
 /**
- * aop封装接口
+ * 切面
  *
  * @author zhenxingchen4
  * @since 2025/5/13

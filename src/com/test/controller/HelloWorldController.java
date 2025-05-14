@@ -25,6 +25,8 @@ public class HelloWorldController {
     private UserService userService;
     @Autowired
     private Action action;
+    @Autowired
+    private Action actionService;
 
     @RequestMapping("/hello")
     public String doGet() {
@@ -73,4 +75,10 @@ public class HelloWorldController {
     public void testAop() {
         action.doAction();
     }
+
+    @RequestMapping("/aop1")
+    public void testAop1() {
+        actionService.doTest();
+    }
+
 }

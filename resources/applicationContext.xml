@@ -57,4 +57,9 @@
         <property type="String" name="mappedName" value="do*"/>
         <property type="com.spring.aop.Advice" name="advice" ref="beforeAdviceService" />
     </bean>
+    <bean id="autoProxyCreator" class="com.spring.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property type="String" name="pattern" value="action*"/>
+        <property type="String" name="interceptorName" value="advisor"/>
+    </bean>
+    <bean id="actionService" class="com.test.service.ActionService"/>
 </bean>

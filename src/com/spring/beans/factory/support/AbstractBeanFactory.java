@@ -65,14 +65,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport
                     ((BeanFactoryAware) singleton).setBeanFactory(this);
                 }
                 // 1. 前置处理
-                applyBeanPostProcessorBeforeInitialization(singleton, beanName);
+                singleton = applyBeanPostProcessorBeforeInitialization(singleton, beanName);
                 // 2. init-method
                 if (beanDefinition.getInitMethodName() != null && !beanDefinition.getInitMethodName().isEmpty()) {
                     invokeInitMethod(beanDefinition, singleton);
                 }
                 // 3. 后置处理
                 applyBeanPostProcessorAfterInitialization(singleton, beanName);
-
+                this.removeSingleton(beanName);
+                this.registerBean(beanName, singleton);
             }
         }
 

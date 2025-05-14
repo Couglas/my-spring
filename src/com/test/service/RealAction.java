@@ -11,4 +11,9 @@ public class RealAction implements Action {
     public void doAction() {
         System.out.println("real action");
     }
+
+    @Override
+    public void doTest() {
+        System.out.println("real action test");
+    }
 }

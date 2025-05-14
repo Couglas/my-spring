@@ -189,7 +189,11 @@ AOP本质上就是通过动态代理创建代理类将通用逻辑加入方法�
 
    修改之前的增强逻辑，使用新增的advisor来专门处理
 
+3. 自动添加动态代理
 
+   将所有的需要动态代理的类都配置在xml中不现实，理想的情况下，只配置一个bean，由它来处理所有需要动态代理的bean。一个简单的思路是，通过beanName匹配bean，匹配到的bean进行动态代理。因此借助在AbstractBeanFactory.getBean中预留的处理bean的方法，可以实现自动添加代理的功能。
+
+   1. BeanNameAutoProxyCreator：实现BeanPostProcessor。匹配beanName，成功的创建动态代理。
 
 
 
